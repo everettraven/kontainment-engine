@@ -17,27 +17,27 @@ import (
 // runtime in the future
 type ContainerRuntime interface {
 	// ImagePull pulls an image from an OCI registry
-	ImagePull(context.Context, string, types.ImagePullOptions) (Image, error)
+	ImagePull(ctx context.Context, img Image, opts types.ImagePullOptions) (io.ReadCloser, error)
 	// ImageList lists all images currently on the host
-	ImageList(context.Context, types.ImageListOptions) ([]Image, error)
+	ImageList(ctx context.Context, opts types.ImageListOptions) ([]Image, error)
 	// ImageBuild builds an image
-	ImageBuild(context.Context, io.Reader, types.ImageBuildOptions) (Image, error)
+	ImageBuild(ctx context.Context, reader io.Reader, opts types.ImageBuildOptions) (io.ReadCloser, error)
 	// ContainerCreate creates a container
-	ContainerCreate(context.Context, Container) (Container, error)
+	ContainerCreate(ctx context.Context, container Container) (Container, error)
 	// ContainerStart starts a container
-	ContainerStart(context.Context, string, types.ContainerStartOptions) (Container, error)
+	ContainerStart(ctx context.Context, id string, opts types.ContainerStartOptions) error
 	// ContainerStop stops a container
-	ContainerStop(context.Context, string, *time.Duration) (Container, error)
+	ContainerStop(ctx context.Context, id string, timeout *time.Duration) error
 	// ContainerDelete deletes a container
-	ContainerDelete(context.Context, string, types.ContainerRemoveOptions) (Container, error)
+	ContainerDelete(ctx context.Context, id string, opts types.ContainerRemoveOptions) error
 	// ContainerExecCreate creates an exec process in a container
-	ContainerExecCreate(context.Context, string, types.ExecConfig) (ContainerExec, error)
+	ContainerExecCreate(ctx context.Context, id string, cfg types.ExecConfig) (string, error)
 	// ContainerExecAttach starts and attaches to an exec process
 	// running in a container
-	ContainerExecAttach(context.Context, string, types.ExecStartCheck) (HijackedResponse, error)
+	ContainerExecAttach(ctx context.Context, id string, chk types.ExecStartCheck) (HijackedResponse, error)
 	// ContainerList lists containers currently running on the host
-	ContainerList(context.Context, types.ContainerListOptions) ([]Container, error)
+	ContainerList(ctx context.Context, opts types.ContainerListOptions) ([]Container, error)
 	// CopyFromContainer copies files from within a container
 	// onto the host machine so they can be used in a volume
-	CopyFromContainer(context.Context, string, string) (io.ReadCloser, error)
+	CopyFromContainer(ctx context.Context, id, src string) (io.ReadCloser, error)
 }

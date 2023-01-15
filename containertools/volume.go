@@ -20,7 +20,7 @@ func WithContainerPath(path string) VolumeOption {
 	}
 }
 
-func NewVolume(opts ...VolumeOption) *volume {
+func NewVolume(opts ...VolumeOption) Volume {
 	vol := &volume{}
 	for _, opt := range opts {
 		opt(vol)

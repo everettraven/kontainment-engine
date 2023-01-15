@@ -20,7 +20,7 @@ func WithContainerPort(containerPort string) PortOption {
 	}
 }
 
-func NewPort(opts ...PortOption) *port {
+func NewPort(opts ...PortOption) Port {
 	p := &port{}
 	for _, opt := range opts {
 		opt(p)

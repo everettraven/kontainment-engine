@@ -7,8 +7,12 @@ import (
 )
 
 func main() {
-	srv := server.NewKontainmentServer()
-	err := srv.Serve()
+	srv, err := server.NewKontainmentServer()
+	if err != nil {
+		fmt.Println("Error creating server:", err)
+	}
+
+	err = srv.Serve()
 
 	if err != nil {
 		fmt.Println("Error running server:", err)

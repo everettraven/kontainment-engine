@@ -41,7 +41,7 @@ func WithContainerId(id string) ContainerOption {
 	}
 }
 
-func NewContainer(opts ...ContainerOption) *container {
+func NewContainer(opts ...ContainerOption) Container {
 	container := &container{}
 	for _, opt := range opts {
 		opt(container)

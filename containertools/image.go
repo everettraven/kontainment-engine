@@ -27,7 +27,7 @@ func WithImageId(id string) ImageOption {
 	}
 }
 
-func NewImage(opts ...ImageOption) *image {
+func NewImage(opts ...ImageOption) Image {
 	img := &image{}
 	for _, opt := range opts {
 		opt(img)
