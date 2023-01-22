@@ -70,7 +70,7 @@ func (c *KontainmentClient) DeleteWorkspace(ctx context.Context, wksp *types.Wor
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusCreated {
+	if resp.StatusCode != http.StatusNoContent {
 		errBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return fmt.Errorf("reading error from response: %w", err)
@@ -94,7 +94,7 @@ func (c *KontainmentClient) ListWorkspaces(ctx context.Context) (*types.Workspac
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusCreated {
+	if resp.StatusCode != http.StatusOK {
 		errBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("reading error from response: %w", err)

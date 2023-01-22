@@ -68,25 +68,27 @@ func (wr *WorkspaceRouter) deleteWorkspace(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	timeout := time.Duration(1) * time.Second
-	err = wr.ContainerRuntime.ContainerStop(context.Background(), containerList[0].Id(), &timeout)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		apiError := types.NewApiError(fmt.Sprintf("stopping container: %s", err.Error()))
-		// TODO: Should consider how to handle if this errors
-		errBytes, _ := json.Marshal(apiError)
-		w.Write(errBytes)
-		return
-	}
+	if len(containerList) > 0 {
+		timeout := time.Duration(1) * time.Second
+		err = wr.ContainerRuntime.ContainerStop(context.Background(), containerList[0].Id(), &timeout)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			apiError := types.NewApiError(fmt.Sprintf("stopping container: %s", err.Error()))
+			// TODO: Should consider how to handle if this errors
+			errBytes, _ := json.Marshal(apiError)
+			w.Write(errBytes)
+			return
+		}
 
-	err = wr.ContainerRuntime.ContainerDelete(context.Background(), containerList[0].Id(), dockertypes.ContainerRemoveOptions{})
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		apiError := types.NewApiError(fmt.Sprintf("deleting container: %s", err.Error()))
-		// TODO: Should consider how to handle if this errors
-		errBytes, _ := json.Marshal(apiError)
-		w.Write(errBytes)
-		return
+		err = wr.ContainerRuntime.ContainerDelete(context.Background(), containerList[0].Id(), dockertypes.ContainerRemoveOptions{})
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			apiError := types.NewApiError(fmt.Sprintf("deleting container: %s", err.Error()))
+			// TODO: Should consider how to handle if this errors
+			errBytes, _ := json.Marshal(apiError)
+			w.Write(errBytes)
+			return
+		}
 	}
 	w.WriteHeader(http.StatusNoContent)
 }
