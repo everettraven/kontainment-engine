@@ -9,7 +9,9 @@ import (
 	"github.com/kontainment/engine/api/server/config"
 	"github.com/kontainment/engine/api/server/internal/router"
 	"github.com/kontainment/engine/api/server/internal/routes/workspace"
-	"github.com/kontainment/engine/containertools/runtimes/docker"
+	"github.com/kontainment/engine/api/types"
+	"github.com/kontainment/engine/pkg/containertools/runtimes/docker"
+	"github.com/kontainment/engine/pkg/plugin"
 )
 
 type KontainmentServer struct {
@@ -28,7 +30,16 @@ func NewKontainmentServer() (*KontainmentServer, error) {
 		config: config.KontainmentConfig{},
 		routers: []router.Router{
 			&workspace.WorkspaceRouter{
-				ContainerRuntime: docker.NewDockerRuntime(docker.WithDockerClient(dockerCli)),
+				PluginClient: plugin.NewClient(
+					plugin.WithRunner(
+						&plugin.DockerRunner{
+							Runtime: docker.NewDockerRuntime(
+								docker.WithDockerClient(dockerCli),
+							),
+						},
+					),
+				),
+				WorkspaceCache: make(map[string]*types.Workspace),
 			},
 		},
 		addr: "127.0.0.1:8080",

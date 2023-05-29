@@ -8,9 +8,6 @@ import (
 	"github.com/docker/docker/api/types"
 )
 
-//TODO: Move each interface definition and implementation
-// to it's own file
-
 // ContainerRuntime is an interface that is meant to convey all the functionality
 // that the Kontainment Engine will need from any given container runtime. This
 // will help Kontainment be configurable and support more than one container
